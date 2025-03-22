@@ -35,8 +35,8 @@ jobs:
 
       - name: Build Docker Images
         run: |
-          docker build -f car-backend/src/main/docker/Dockerfile.jvm -t ghcr.io/${{ toLowerCase(github.repository_owner) }}/car-backend:latest car-backend
-          docker build -f text-validation-service/src/main/docker/Dockerfile.jvm -t ghcr.io/${{ toLowerCase(github.repository_owner) }}/text-validation-service:latest text-validation-service
+          docker build -f car-backend/src/main/docker/Dockerfile.jvm -t ghcr.io/r33bickard/car-backend:latest car-backend
+          docker build -f text-validation-service/src/main/docker/Dockerfile.jvm -t ghcr.io/r33bickard/text-validation-service:latest text-validation-service
 
   performance_tests:
     runs-on: ubuntu-latest
