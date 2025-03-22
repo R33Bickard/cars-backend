@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: "17"
 
       - name: Build car-backend with Maven
         working-directory: car-backend
@@ -49,8 +49,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          
+          node-version: "18"
+
       - name: Install Artillery
         run: npm install -g artillery
 
@@ -59,7 +59,7 @@ jobs:
 
       # JMeter-Tests
       - name: Run JMeter Tests
-        uses: justb4/jmeter-action@v2
+        uses: justb4/jmeter-action@v2.1.0
         with:
           jmxFile: car-backend/src/test/java/com/example/jmeter/car-loadtest.jmx
           java_opts: "-Xms512m -Xmx1024m"
