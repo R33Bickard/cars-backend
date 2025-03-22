@@ -23,9 +23,7 @@ services:
       - "5432:5432"
 
   car-backend:
-    build:
-      context: ./car-backend
-      dockerfile: src/main/docker/Dockerfile.jvm
+    image: ghcr.io/r33bickard/car-backend:latest
     container_name: car-backend
     networks:
       - car-net
@@ -41,9 +39,7 @@ services:
       - "8080:8080"
 
   text-validation:
-    build:
-      context: ./text-validation-service
-      dockerfile: src/main/docker/Dockerfile.jvm
+    image: ghcr.io/r33bickard/text-validation:latest
     container_name: text-validation
     networks:
       - car-net
