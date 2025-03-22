@@ -45,35 +45,43 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Artillery-Tests
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: "16"
 
+      # Artillery-Tests
       - name: Install Artillery
         run: npm install -g artillery
 
-      - name: Run Artillery Tests and Generate Report
+      - name: Run Load Test
         run: |
-          # Erstelle den Ordner für die Reports (falls nicht vorhanden)
-          mkdir -p car-backend/src/test/java/com/example/reports/artillery
-          # Führe den Artillery-Test aus und speichere das Ergebnis als JSON
-          artillery run car-backend/src/test/java/com/example/artillery/car-loadtest.yml --output car-backend/src/test/java/com/example/reports/artillery/car-loadtest-report.json
-          # Konvertiere den JSON-Output in einen HTML-Report
-          artillery report car-backend/src/test/java/com/example/reports/artillery/car-loadtest-report.json --output car-backend/src/test/java/com/example/reports/artillery/car-loadtest-report.html
+          artillery run src\test\java\com\example\artillery\car-loadtest.yml --output src\test\java\com\example\reports/artillery/car-loadtest-report.json
 
-      # JMeter-Tests
-      - name: Run JMeter Tests
-        uses: justb4/jmeter-action@v2.1.0
-        with:
-          jmxFile: car-backend/src/test/java/com/example/jmeter/car-loadtest.jmx
-          java_opts: "-Xms512m -Xmx1024m"
-
-      # Upload Artillery Report Artifact
       - name: Upload Artillery Report
-        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: artillery-report
-          path: car-backend/src/test/java/com/example/reports/artillery/car-loadtest-report.html
+          path: reports/artillery/cattle-loadtest-report.html
+
+      # JMeter-Tests
+      - name: Install Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Download JMeter
+        run: |
+          wget https://downloads.apache.org//jmeter/binaries/apache-jmeter-5.6.2.tgz
+          tar -xvzf apache-jmeter-5.6.2.tgz
+
+      - name: Run JMeter Test
+        run: |
+          apache-jmeter-5.6.2/bin/jmeter -n -t src\test\java\com\example\jmeter\cattle-loadtest.jmx -l reports/jmeter/results.jtl -e -o src\test\java\com\example\reports\jmeter
+
+      - name: Upload JMeter Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jmeter-html-report
+          path: reports/jmeter/html-report
