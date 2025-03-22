@@ -21,13 +21,18 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Build with Maven
+      - name: Build car-backend with Maven
+        working-directory: car-backend
+        run: ./mvnw clean package
+
+      - name: Build text-validation with Maven
+        working-directory: text-validation-service
         run: ./mvnw clean package
 
       - name: Build Docker Images
         run: |
-          docker build -f car-backend/src/main/docker/Dockerfile.jvm -t ghcr.io/${{ github.repository_owner }}/car-backend:latest .
-          docker build -f text-validation-service/src/main/docker/Dockerfile.jvm -t ghcr.io/${{ github.repository_owner }}/text-validation-service:latest .
+          docker build -f car-backend/src/main/docker/Dockerfile.jvm -t ghcr.io/${{ github.repository_owner }}/car-backend:latest car-backend
+          docker build -f text-validation-service/src/main/docker/Dockerfile.jvm -t ghcr.io/${{ github.repository_owner }}/text-validation-service:latest text-validation-service
 
   performance_tests:
     runs-on: ubuntu-latest
@@ -46,14 +51,13 @@ jobs:
         run: npm install -g artillery
 
       - name: Run Artillery Tests
-        run: artillery run car-backend\src\test\java\com\example\artillery\car-loadtest.yml
+        run: artillery run car-backend/src/test/java/com/example/artillery/car-loadtest.yml
 
       # JMeter-Tests
       - name: Run JMeter Tests
         uses: justb4/jmeter-action@v2
         with:
           jmxFile: car-backend/src/test/java/com/example/jmeter/car-loadtest.jmx
-          # Optional: zusätzliche Java-Optionen, falls benötigt:
           java_opts: "-Xms512m -Xmx1024m"
 
       # Optional: Ergebnisse als Artefakte speichern
