@@ -39,7 +39,7 @@ services:
       - "8080:8080"
 
   text-validation:
-    image: ghcr.io/r33bickard/text-validation:latest
+    image: ghcr.io/r33bickard/text-validation-service:latest
     container_name: text-validation
     networks:
       - car-net
