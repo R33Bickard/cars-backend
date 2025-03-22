@@ -23,11 +23,15 @@ jobs:
 
       - name: Build car-backend with Maven
         working-directory: car-backend
-        run: ./mvnw clean package
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package
 
       - name: Build text-validation with Maven
         working-directory: text-validation-service
-        run: ./mvnw clean package
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package
 
       - name: Build Docker Images
         run: |
