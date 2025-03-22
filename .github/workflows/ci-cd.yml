@@ -62,7 +62,7 @@ jobs:
 
       # JMeter-Tests
       - name: Run JMeter Tests
-        uses: justb4/jmeter-action@v2.1.0
+        uses: justb4/jmeter-action@master
         with:
           jmxFile: car-backend/src/test/java/com/example/jmeter/car-loadtest.jmx
           java_opts: "-Xms512m -Xmx1024m"
