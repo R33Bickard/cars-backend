@@ -19,7 +19,7 @@ public class ValidationService {
     private static final Logger LOG = Logger.getLogger(ValidationService.class);
 
     private static final List<String> FORBIDDEN_NAMES = List.of(
-        "kaputt", "defekt", "schrott", "müll", "unfall", "böse"
+        "kaputt", "defekt", "schrott", "müll", "unfall", "rich"
     );
 
     private static final Pattern NUMBERS_PATTERN = Pattern.compile(".*\\d.*"); 
