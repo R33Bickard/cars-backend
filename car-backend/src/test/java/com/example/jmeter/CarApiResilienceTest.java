@@ -1,24 +1,25 @@
 package com.example.jmeter;
 
 import io.quarkus.test.junit.QuarkusTest;
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.containsString;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
 
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.hasSize;
+
 @QuarkusTest
+@QuarkusTestResource(PostgreSQLTestResource.class)
 public class CarApiResilienceTest {
 
     @Test
-    public void testFallbackOnTimeout() {
-        // Hier simulieren wir einen Delay (zum Beispiel durch einen speziellen Query-Parameter).
-        // In deiner API solltest du diesen Parameter auswerten und im Fehlerfall einen Fallback auslösen.
+    void testFallbackOnTimeout() {
         given()
-          .queryParam("simulateDelay", "true")
+            .queryParam("simulateDelay", "true")
         .when()
-          .get("/car")
+            .get("/cars/resilient")
         .then()
-          .statusCode(200)
-          // Prüfe, ob der Fallback-Response den String "Fallback" enthält.
-          .body(containsString("Fallback"));
+            .statusCode(200)
+            .body("$", hasSize(0));
     }
 }
